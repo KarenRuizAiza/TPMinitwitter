@@ -44,7 +44,7 @@ public class User {
 
     private void assertNombreVacio(String nombre){
         if (nombre.isEmpty()){
-            throw new RuntimeException(ERROR_NOMBRE_VACIO)
+            throw new RuntimeException(ERROR_NOMBRE_VACIO);
         }
     }
 
