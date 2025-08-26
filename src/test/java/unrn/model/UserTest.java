@@ -28,7 +28,7 @@ class UserTest {
     void crearUsuario_nombreInvalido() {
         // Ejercitación y Verificación
         var ex = assertThrows(RuntimeException.class, () -> new User("abc"));
-        //assertEquals(User.ERROR_INVALID_USERNAME, ex.getMessage());
+        assertEquals(User.ERROR_NOMBRE_CORTO, ex.getMessage());
     }
 
     @Test
