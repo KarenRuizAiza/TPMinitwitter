@@ -2,7 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #f5f8fa;
-  font-family: system-ui, sans-serif;
+/* ----------------------------------------------------
+   Paleta de colores personalizada para el tema "mytheme".
+   Estos valores sobrescriben los colores por defecto de DaisyUI.
+   ---------------------------------------------------- */
+
+[data-theme="mytheme"] {
+    /* Azul brillante para botones y acciones principales */
+    --color-primary: hsl(203, 89%, 53%);
+    --color-primary-focus: hsl(203, 89%, 48%);
+    --color-primary-content: hsl(0, 0%, 100%); /* Texto blanco sobre primario */
+    
+    /* Negro suave para texto secundario */
+    --color-secondary: hsl(208, 11%, 11%);
+    --color-secondary-focus: hsl(208, 11%, 8%);
+    --color-secondary-content: hsl(0, 0%, 100%);
+    
+    /* Gris para acentos y bordes */
+    --color-accent: hsl(208, 14%, 46%);
+    --color-accent-focus: hsl(208, 14%, 41%);
+    --color-accent-content: hsl(0, 0%, 100%);
+    
+    /* Color de texto principal */
+    --color-neutral: hsl(208, 11%, 11%);
+    --color-neutral-focus: hsl(208, 11%, 8%);
+    --color-neutral-content: hsl(0, 0%, 100%);
+    
+    /* Fondos */
+    --color-base-100: hsl(0, 0%, 100%);      /* Fondo principal de las "cards" (blanco) */
+    --color-base-200: hsl(207, 29%, 97%);    /* Fondo ligeramente más oscuro para secciones */
+    --color-base-300: hsl(206, 33%, 91%);    /* Bordes y separadores */
+    --color-base-content: hsl(208, 11%, 11%); /* Texto sobre los fondos (negro suave) */
+    
+    /* Colores de estado */
+    --color-info: hsl(203, 89%, 53%);
+    --color-success: hsl(145, 63%, 42%);
+    --color-warning: hsl(45, 100%, 51%);
+    --color-error: hsl(0, 84%, 60%);
 }

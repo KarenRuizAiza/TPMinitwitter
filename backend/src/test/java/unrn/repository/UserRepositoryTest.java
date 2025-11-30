@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 import unrn.model.Tweet;
 import unrn.model.User;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@ActiveProfiles("test")
 public class UserRepositoryTest {
 
     @Autowired
@@ -26,7 +28,7 @@ public class UserRepositoryTest {
     @Test
     public void whenFindByUserName_thenReturnUser() {
         // given
-        User user = new User("testuser");
+        User user = new User("testuser", "testuser");
         entityManager.persist(user);
         entityManager.flush();
 
@@ -41,7 +43,7 @@ public class UserRepositoryTest {
     @Test
     public void whenUserIsDeleted_thenTweetsAreAlsoDeleted() {
         // given
-        User user = new User("userwithtweets");
+        User user = new User("userwithtweets", "userwithtweets");
         user.addTweet("My first tweet!");
         entityManager.persist(user);
         entityManager.flush();

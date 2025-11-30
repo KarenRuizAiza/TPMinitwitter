@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.Objects;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Tweet {
     @Id
@@ -12,6 +14,9 @@ public class Tweet {
 
     @Column(length = 280)
     private String text;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "original_tweet_id")
@@ -32,6 +37,11 @@ public class Tweet {
         this.text = text;
         this.author = Objects.requireNonNull(author, "Author cannot be null.");
         this.originalTweet = originalTweet;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.creationDate = LocalDateTime.now();
     }
 
     private void assertValidText(String text, Tweet originalTweet) {
@@ -68,6 +78,10 @@ public class Tweet {
 
     public Long getId() {
         return id;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
     static final String ERROR_INVALID_TWEET_TEXT = "Tweet text must be between 1 and 280 characters.";

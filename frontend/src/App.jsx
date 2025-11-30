@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import CreateTweet from "./components/CreateTweet";
+import UsersPage from "./pages/UsersPage";
+
+// Componente de Layout que define la estructura de la página
+const AppLayout = ({ onNewTweetClick, users, tweets, setTweets }) => (
+  <div className="min-h-screen bg-base-200">
+    <Header onNewTweetClick={onNewTweetClick} />
+    {/* Outlet renderizará el componente de la ruta actual (Home, UsersPage, etc.) */}
+    <Outlet context={{ users, tweets, setTweets }} />
+  </div>
+);
 
 export default function App() {
   const [tweets, setTweets] = useState([]);
@@ -51,12 +61,15 @@ export default function App() {
   const closeCreateTweetModal = () => setCreateTweetModalOpen(false);
 
   return (
-    <div data-theme="miniTwitter">
+    <div data-theme="mytheme">
       <BrowserRouter>
-        <Header onNewTweetClick={openCreateTweetModal} />
         <Routes>
-          <Route path="/" element={<Home tweets={tweets} setTweets={setTweets} users={users} />} />
-          <Route path="/user/:userId" element={<Home tweets={tweets} setTweets={setTweets} users={users} />} />
+          {/* Todas las rutas ahora están anidadas dentro del Layout */}
+          <Route path="/" element={<AppLayout onNewTweetClick={openCreateTweetModal} users={users} tweets={tweets} setTweets={setTweets} />}>
+            <Route index element={<Home tweets={tweets} setTweets={setTweets} users={users} />} />
+            <Route path="user/:userId" element={<Home tweets={tweets} setTweets={setTweets} users={users} />} />
+            <Route path="users" element={<UsersPage users={users} setUsers={setUsers} />} />
+          </Route>
         </Routes>
 
         {isCreateTweetModalOpen && (

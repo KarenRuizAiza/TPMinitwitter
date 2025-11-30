@@ -16,7 +16,7 @@ class UserTest {
         String userName = "UsuarioValido";
 
         // Ejercitación
-        User user = new User(userName);
+        User user = new User("UsuarioValido", userName);
 
         // Verificación
         assertEquals(userName, user.getUserName(), "El nombre de usuario no coincide con el esperado");
@@ -27,7 +27,7 @@ class UserTest {
     @DisplayName("Crear usuario con nombre inválido lanza excepción")
     void crearUsuario_nombreInvalido() {
         // Ejercitación y Verificación
-        var ex = assertThrows(RuntimeException.class, () -> new User("abc"));
+        var ex = assertThrows(RuntimeException.class, () -> new User("abc", "abc"));
         assertEquals(User.ERROR_NOMBRE_CORTO, ex.getMessage());
     }
 
@@ -35,7 +35,7 @@ class UserTest {
     @DisplayName("Agregar un tweet original")
     void agregarTweetOriginal() {
         // Setup
-        User user = new User("UsuarioValido");
+        User user = new User("UsuarioValido", "UsuarioValido");
 
         // Ejercitación
         user.addTweet("Este es un tweet original");
@@ -50,8 +50,8 @@ class UserTest {
     @DisplayName("Agregar un retweet")
     void agregarRetweet() {
         // Setup
-        User user1 = new User("Usuario1");
-        User user2 = new User("Usuario2");
+        User user1 = new User("Usuario1", "Usuario1");
+        User user2 = new User("Usuario2", "Usuario2");
         Tweet originalTweet = new Tweet("Tweet original", user1, null);
 
         // Ejercitación
@@ -67,7 +67,7 @@ class UserTest {
     @DisplayName("Eliminar todos los tweets del usuario")
     void eliminarTweetsUsuario() {
         // Setup
-        User user = new User("UsuarioValido");
+        User user = new User("UsuarioValido", "UsuarioValido");
         user.addTweet("Tweet 1");
         user.addTweet("Tweet 2");
 
@@ -78,4 +78,3 @@ class UserTest {
         assertTrue(user.getTweets().isEmpty(), "La lista de tweets debe estar vacía después de eliminar los tweets");
     }
 }
-

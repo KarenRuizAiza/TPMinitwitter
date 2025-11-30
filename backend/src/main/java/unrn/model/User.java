@@ -9,14 +9,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 public class User {
-    static final String ERROR_NOMBRE_LARGO = "El nombre no debe tener más de 25 caracteres";
-    static final String ERROR_NOMBRE_CORTO = "El nombre debe tener al menos 5 caracteres";
-    static final String ERROR_NOMBRE_NULO = "El nombre no puede ser nulo ni vacío";
-    static final String ERROR_NOMBRE_VACIO = "El nombre no puede ser nulo ni vacío";
+    static final String ERROR_NOMBRE_LARGO = "El nombre de usuario no debe tener más de 25 caracteres";
+    static final String ERROR_NOMBRE_CORTO = "El nombre de usuario debe tener al menos 5 caracteres";
+    static final String ERROR_NOMBRE_NULO = "El nombre de usuario no puede ser nulo ni vacío";
+    static final String ERROR_NOMBRE_VACIO = "El nombre de usuario no puede ser nulo ni vacío";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(unique = true, nullable = false, length = 25)
     private String userName;
@@ -28,10 +31,11 @@ public class User {
     protected User() {
     }
 
-    public User(String userName) {
+    public User(String name, String userName) {
         assertNombreCorto(userName);
         assertNombreLargo(userName);
 
+        this.name = name;
         this.userName = userName;
         this.tweets = new ArrayList<>();
     }
@@ -67,12 +71,18 @@ public class User {
         tweets.add(new Tweet("", this, originalTweet));
     }
 
+
+
     public void deleteUserTweets() {
         tweets.clear();
     }
 
     public List<Tweet> getTweets() {
         return List.copyOf(tweets);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getUserName() {

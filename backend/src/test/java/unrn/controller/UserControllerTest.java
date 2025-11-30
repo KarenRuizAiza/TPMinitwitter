@@ -34,7 +34,7 @@ public class UserControllerTest {
     @Test
     public void whenPostUser_thenUserIsCreated() throws Exception {
         // given
-        var createUserRequest = new UserController.CreateUserRequest("testuser");
+        var createUserRequest = new UserController.CreateUserRequest("testuser", "testuser");
 
         // when & then
         mockMvc.perform(post("/users")
@@ -42,16 +42,16 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(createUserRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.username", is("testuser")));
+                .andExpect(jsonPath("$.userName", is("testuser")));
     }
 
     @Test
     public void whenPostDuplicateUser_thenBadRequest() throws Exception {
         // given
         // Primero creamos un usuario en la BD
-        userRepository.save(new User("existinguser"));
+        userRepository.save(new User("existinguser", "existinguser"));
 
-        var createUserRequest = new UserController.CreateUserRequest("existinguser");
+        var createUserRequest = new UserController.CreateUserRequest("existinguser", "existinguser");
 
         // when & then
         mockMvc.perform(post("/users")
@@ -63,7 +63,7 @@ public class UserControllerTest {
     @Test
     public void whenPostUserWithInvalidUsername_thenBadRequest() throws Exception {
         // El nombre es muy corto, la validación del modelo debería fallar
-        var createUserRequest = new UserController.CreateUserRequest("abc");
+        var createUserRequest = new UserController.CreateUserRequest("abc", "abc");
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -20,12 +20,12 @@ public class UserController {
     }
 
     // DTO para el request de creación de usuario
-    public record CreateUserRequest(String userName) {}
+    public record CreateUserRequest(String name, String userName) {}
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserRequest request) {
         try {
-            UserDTO createdUser = userService.createUser(request.userName());
+            UserDTO createdUser = userService.createUser(request.name(), request.userName());
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             // Manejo simple de excepciones, se podría mejorar con @ControllerAdvice
@@ -36,5 +36,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
     }
 }

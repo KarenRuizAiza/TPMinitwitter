@@ -39,7 +39,7 @@ public class TweetControllerTest {
     @Test
     public void whenPostTweet_thenTweetIsCreated() throws Exception {
         // given
-        User author = userRepository.save(new User("author"));
+        User author = userRepository.save(new User("author", "author"));
         var request = new TweetController.CreateTweetRequest(author.getId(), "A valid tweet text.");
 
         // when & then
@@ -55,8 +55,8 @@ public class TweetControllerTest {
     @Test
     public void whenPostRetweet_thenRetweetIsCreated() throws Exception {
         // given
-        User originalAuthor = userRepository.save(new User("originalAuthor"));
-        User retweeter = userRepository.save(new User("retweeter"));
+        User originalAuthor = userRepository.save(new User("originalAuthor", "originalAuthor"));
+        User retweeter = userRepository.save(new User("retweeter", "retweeter"));
         Tweet originalTweet = tweetRepository.save(new Tweet("Original tweet.", originalAuthor, null));
 
         var request = new TweetController.CreateRetweetRequest(retweeter.getId(), originalTweet.getId());
@@ -74,7 +74,7 @@ public class TweetControllerTest {
     @Test
     public void whenPostRetweetOwnTweet_thenBadRequest() throws Exception {
         // given
-        User author = userRepository.save(new User("self_retweeter"));
+        User author = userRepository.save(new User("self_retweeter", "self_retweeter"));
         Tweet originalTweet = tweetRepository.save(new Tweet("My own tweet.", author, null));
         var request = new TweetController.CreateRetweetRequest(author.getId(), originalTweet.getId());
 
@@ -85,4 +85,3 @@ public class TweetControllerTest {
                 .andExpect(status().isBadRequest());
     }
 }
-

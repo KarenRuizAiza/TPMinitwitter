@@ -32,7 +32,7 @@ public class TweetService {
 
         author.addTweet(text);
         userRepository.save(author);
-        
+
         Tweet newTweet = author.getTweets().get(author.getTweets().size() - 1);
         return toDTO(newTweet);
     }
@@ -71,15 +71,19 @@ public class TweetService {
     }
 
     private UserDTO toDTO(User user) {
-        return new UserDTO(user.getId(), user.getUserName());
+        return new UserDTO(user.getId(), user.getName(), user.getUserName());
     }
 
     private TweetDTO toDTO(Tweet tweet) {
         UserDTO authorDTO = toDTO(tweet.getAuthor());
         Long originalTweetId = tweet.getOriginalTweet() != null ? tweet.getOriginalTweet().getId() : null;
-        UserDTO originalAuthorDTO = tweet.getOriginalTweet() != null ? toDTO(tweet.getOriginalTweet().getAuthor()) : null;
+        String originalTweetText = tweet.getOriginalTweet() != null ? tweet.getOriginalTweet().getText() : null;
+        UserDTO originalAuthorDTO = tweet.getOriginalTweet() != null ? toDTO(tweet.getOriginalTweet().getAuthor())
+                : null;
 
         return new TweetDTO(tweet.getId(), tweet.getText(), authorDTO,
-                originalTweetId, originalAuthorDTO != null ? originalAuthorDTO.userName() : null);
+                originalTweetId, originalAuthorDTO != null ? originalAuthorDTO.userName() : null,
+                originalTweetText,
+                tweet.getCreationDate());
     }
 }

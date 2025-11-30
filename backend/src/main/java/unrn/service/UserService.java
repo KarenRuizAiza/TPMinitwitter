@@ -20,14 +20,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO createUser(String userName) {
+    public UserDTO createUser(String name, String userName) {
         // Regla de negocio: No se pueden agregar dos usuarios con el mismo userName.
         Optional<User> existingUser = userRepository.findByUserName(userName);
         if (existingUser.isPresent()) {
             throw new RuntimeException("User with username '" + userName + "' already exists.");
         }
         // La validación de la longitud del nombre de usuario se hace en el constructor de User.
-        User newUser = new User(userName);
+        User newUser = new User(name, userName);
         User savedUser = userRepository.save(newUser);
         return toDTO(savedUser);
     }
@@ -39,7 +39,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
     private UserDTO toDTO(User user) {
-        return new UserDTO(user.getId(), user.getUserName());
+        return new UserDTO(user.getId(), user.getName(), user.getUserName());
     }
 }

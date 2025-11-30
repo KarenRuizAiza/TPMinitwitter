@@ -11,7 +11,7 @@ class TweetTest {
     @DisplayName("Crear un tweet original con texto válido")
     void crearTweetOriginal_textoValido() {
         // Setup
-        User user = new User("UsuarioValido");
+        User user = new User("UsuarioValido", "UsuarioValido");
 
         // Ejercitación
         Tweet tweet = new Tweet("Texto válido", user, null);
@@ -26,7 +26,7 @@ class TweetTest {
     @DisplayName("Crear un tweet con texto inválido lanza excepción")
     void crearTweet_textoInvalido() {
         // Setup
-        User user = new User("UsuarioValido");
+        User user = new User("UsuarioValido", "UsuarioValido");
 
         // Ejercitación y Verificación
         var ex = assertThrows(RuntimeException.class, () -> new Tweet("", user, null));
@@ -37,8 +37,8 @@ class TweetTest {
     @DisplayName("Crear un retweet válido")
     void crearRetweet_valido() {
         // Setup
-        User user1 = new User("Usuario1");
-        User user2 = new User("Usuario2");
+        User user1 = new User("Usuario1", "Usuario1");
+        User user2 = new User("Usuario2", "Usuario2");
         Tweet originalTweet = new Tweet("Tweet original", user1, null);
 
         // Ejercitación
@@ -54,7 +54,7 @@ class TweetTest {
     @DisplayName("Crear un retweet del mismo usuario lanza excepción")
     void crearRetweet_mismoUsuarioLanzaExcepcion() {
         // Setup
-        User user = new User("UsuarioValido");
+        User user = new User("UsuarioValido", "UsuarioValido");
         Tweet originalTweet = new Tweet("Tweet original", user, null);
 
         // Ejercitación y Verificación
@@ -62,4 +62,3 @@ class TweetTest {
         assertEquals(Tweet.ERROR_INVALID_RETWEET, ex.getMessage());
     }
 }
-

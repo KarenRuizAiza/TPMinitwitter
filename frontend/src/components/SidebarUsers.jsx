@@ -4,17 +4,13 @@ import UserAvatar from "./UserAvatar";
 
 export default function SidebarUsers({ users = [] }) {
   return (
-    <aside className="w-72 bg-base-100 p-4 rounded-2xl shadow-sm hidden lg:block">
+    <aside className="bg-base-100 p-4 rounded-2xl shadow-sm">
       <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
         <FiUsers />
         Lista de Usuarios
       </h2>
 
       <div className="space-y-4">
-        <Link to="/" className="flex items-center gap-3 font-bold">
-          <FiHome />
-          Home
-        </Link>
         {users.map((u) => (
           <Link to={`/user/${u.id}`} key={u.id} className="flex items-center gap-3">
             <UserAvatar name={u.userName} />

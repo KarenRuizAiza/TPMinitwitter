@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../peliculas-backend"
+		},
+		{
+			"path": "../../../../carrito-backend"
+		}
+	],
+	"settings": {}
+}
