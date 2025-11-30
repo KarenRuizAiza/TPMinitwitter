@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 // Componente para la tarjeta de usuario
 function UserCard({ user, onDelete }) {
   return (
-    <div className="card bg-base-200 shadow-md">
+    <div className="card bg-base-100 shadow-sm border border-base-content/20">
       <div className="card-body">
-        <h2 className="card-title">{user.name}</h2>
-        <p>@{user.userName}</p>
+        <h2 className="card-title text-base-content">{user.name}</h2>
+        <p className="text-base-content/70">@{user.userName}</p>
         <div className="card-actions justify-end">
           <button className="btn btn-error btn-sm" onClick={() => onDelete(user.id)}>
             Eliminar
@@ -63,12 +63,12 @@ function CreateUserForm({ onUserCreated, onClose }) {
       {error && <div className="alert alert-error">{error}</div>}
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Nombre Completo</span>
+          <span className="label-text text-base-content">Nombre Completo</span>
         </label>
         <input
           type="text"
           placeholder="Ej: Jane Doe"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full bg-base-100 text-base-content"
           value={name}
           onChange={(e) => setName(e.target.value)}
           disabled={isLoading}
@@ -76,12 +76,12 @@ function CreateUserForm({ onUserCreated, onClose }) {
       </div>
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Nombre de Usuario</span>
+          <span className="label-text text-base-content">Nombre de Usuario</span>
         </label>
         <input
           type="text"
           placeholder="Ej: janedoe"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full bg-base-100 text-base-content"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           disabled={isLoading}
@@ -130,7 +130,7 @@ export default function UsersPage({ users, setUsers }) {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-base-100 text-base-content">
       <div className="flex justify-center items-center mb-6">
         <button className="btn btn-primary" onClick={openModal}>
           Crear Usuario
@@ -145,13 +145,13 @@ export default function UsersPage({ users, setUsers }) {
           ))}
         </div>
       ) : (
-        <p className="text-center">No se encontraron usuarios. Intenta crear uno nuevo.</p>
+        <p className="text-center text-base-content/70">No se encontraron usuarios. Intenta crear uno nuevo.</p>
       )}
 
       {/* Modal para Crear Usuario */}
       {isModalOpen && (
         <dialog id="create_user_modal" className="modal modal-open">
-          <div className="modal-box">
+          <div className="modal-box bg-base-100">
             <h3 className="font-bold text-lg mb-4">Nuevo Usuario</h3>
             <CreateUserForm onUserCreated={handleUserCreated} onClose={closeModal} />
           </div>

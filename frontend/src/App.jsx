@@ -4,10 +4,11 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import CreateTweet from "./components/CreateTweet";
 import UsersPage from "./pages/UsersPage";
+import './index.css';
 
 // Componente de Layout que define la estructura de la página
 const AppLayout = ({ onNewTweetClick, users, tweets, setTweets }) => (
-  <div className="min-h-screen bg-base-200">
+  <div className="min-h-screen">
     <Header onNewTweetClick={onNewTweetClick} />
     {/* Outlet renderizará el componente de la ruta actual (Home, UsersPage, etc.) */}
     <Outlet context={{ users, tweets, setTweets }} />
@@ -61,7 +62,7 @@ export default function App() {
   const closeCreateTweetModal = () => setCreateTweetModalOpen(false);
 
   return (
-    <div data-theme="mytheme">
+    <div>
       <BrowserRouter>
         <Routes>
           {/* Todas las rutas ahora están anidadas dentro del Layout */}

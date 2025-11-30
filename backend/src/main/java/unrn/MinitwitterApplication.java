@@ -22,12 +22,12 @@ public class MinitwitterApplication {
     @Profile("!test")
     public CommandLineRunner initData(UserRepository userRepository, TweetService tweetService) {
         return args -> {
-            User user1 = userRepository.save(new User("John Doe", "johndoe"));
-            User user2 = userRepository.save(new User("Jane Smith", "janesmith"));
+            User user1 = userRepository.save(new User("Thiago Ruiz", "thiagor"));
+            User user2 = userRepository.save(new User("Melani Perez", "melanip"));
 
             IntStream.range(0, 15).forEach(i -> {
-                tweetService.createTweet(user1.getId(), "This is tweet number " + i + " from John Doe");
-                tweetService.createTweet(user2.getId(), "This is tweet number " + i + " from Jane Smith");
+                tweetService.createTweet(user1.getId(), "This is tweet number " + i + " from Thiago Ruiz");
+                tweetService.createTweet(user2.getId(), "This is tweet number " + i + " from Melani Perez");
             });
         };
     }
