@@ -1,165 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Layout from '../components/Layout';
+import UserCard from '../components/UserCard';
+import CreateUserModal from '../components/CreateUserModal';
+import { useAppContext } from '../context/AppContext';
+import { deleteUser } from '../services/api';
 
-// Componente para la tarjeta de usuario
-function UserCard({ user, onDelete }) {
-  return (
-    <div className="card bg-base-100 shadow-sm border border-base-content/20">
-      <div className="card-body">
-        <h2 className="card-title text-base-content">{user.name}</h2>
-        <p className="text-base-content/70">@{user.userName}</p>
-        <div className="card-actions justify-end">
-          <button className="btn btn-error btn-sm" onClick={() => onDelete(user.id)}>
-            Eliminar
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+const UsersPage = () => {
+    const { users, loadingUsers, triggerRefresh } = useAppContext();
 
-// Componente para el formulario de creación de usuario
-function CreateUserForm({ onUserCreated, onClose }) {
-  const [name, setName] = useState('');
-  const [userName, setUserName] = useState('');
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!name || !userName) {
-      setError('Nombre y nombre de usuario son requeridos.');
-      return;
-    }
-    setError(null);
-    setIsLoading(true);
-
-    fetch('http://localhost:8080/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, userName }),
-    })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(err => { throw new Error(err.message || 'Error al crear el usuario') });
+    const handleDeleteUser = async (userId) => {
+        try {
+            await deleteUser(userId);
+            triggerRefresh();
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            alert("Error al eliminar el usuario");
         }
-        return response.json();
-      })
-      .then(newUser => {
-        onUserCreated(newUser);
-        onClose(); // Cierra el modal al éxito
-      })
-      .catch(err => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+    };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <div className="alert alert-error">{error}</div>}
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text text-base-content">Nombre Completo</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Ej: Jane Doe"
-          className="input input-bordered w-full bg-base-100 text-base-content"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          disabled={isLoading}
-        />
-      </div>
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text text-base-content">Nombre de Usuario</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Ej: janedoe"
-          className="input input-bordered w-full bg-base-100 text-base-content"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          disabled={isLoading}
-        />
-      </div>
-      <div className="modal-action">
-        <button type="button" className="btn" onClick={onClose} disabled={isLoading}>Cancelar</button>
-        <button type="submit" className="btn btn-primary" disabled={isLoading}>
-          {isLoading ? <span className="loading loading-spinner"></span> : 'Crear Usuario'}
-        </button>
-      </div>
-    </form>
-  );
-}
+    return (
+        <Layout>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold">Gestión de Usuarios</h1>
+                <button
+                    className="btn btn-primary rounded-full text-white gap-2"
+                    onClick={() => document.getElementById('create_user_modal').showModal()}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                    </svg>
+                    Crear Usuario
+                </button>
+            </div>
 
+            {loadingUsers ? (
+                <div className="flex justify-center p-8">
+                    <span className="loading loading-spinner loading-lg"></span>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {users.map(user => (
+                        <UserCard key={user.id} user={user} onDelete={handleDeleteUser} />
+                    ))}
+                </div>
+            )}
 
-export default function UsersPage({ users, setUsers }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+            {!loadingUsers && users.length === 0 && (
+                <div className="text-center p-8 text-gray-500">
+                    No hay usuarios registrados.
+                </div>
+            )}
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+            <CreateUserModal />
+        </Layout>
+    );
+};
 
-  const handleUserCreated = (newUser) => {
-    setUsers(currentUsers => [...currentUsers, newUser]);
-  };
-
-  const handleUserDeleted = (userId) => {
-    const isConfirmed = window.confirm("¿Estás seguro de que quieres eliminar este usuario?");
-
-    if (isConfirmed) {
-      fetch(`http://localhost:8080/users/${userId}`, {
-        method: 'DELETE',
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Error al eliminar el usuario');
-          }
-          setUsers(currentUsers => currentUsers.filter(user => user.id !== userId));
-          alert("Usuario eliminado correctamente ✔");
-        })
-        .catch(error => {
-          console.error("Error:", error);
-          alert(error.message || "No se pudo eliminar el usuario.");
-        });
-    }
-  };
-
-  return (
-    <div className="container mx-auto p-4 bg-base-100 text-base-content">
-      <div className="flex justify-center items-center mb-6">
-        <button className="btn btn-primary" onClick={openModal}>
-          Crear Usuario
-        </button>
-      </div>
-
-      {/* Lista de Usuarios */}
-      {users && users.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {users.map(user => (
-            <UserCard key={user.id} user={user} onDelete={handleUserDeleted} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-base-content/70">No se encontraron usuarios. Intenta crear uno nuevo.</p>
-      )}
-
-      {/* Modal para Crear Usuario */}
-      {isModalOpen && (
-        <dialog id="create_user_modal" className="modal modal-open">
-          <div className="modal-box bg-base-100">
-            <h3 className="font-bold text-lg mb-4">Nuevo Usuario</h3>
-            <CreateUserForm onUserCreated={handleUserCreated} onClose={closeModal} />
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button onClick={closeModal}>close</button>
-          </form>
-        </dialog>
-      )}
-    </div>
-  );
-}
+export default UsersPage;
